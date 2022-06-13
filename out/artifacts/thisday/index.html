@@ -1,0 +1,70 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/index.css">
+    <script language="JavaScript" src="js/index.js"></script>
+</head>
+<body>
+
+<div id="div_container">
+    <div id="div_fruit_list">
+        <p class="center f30">欢迎使用水果库存后台管理系统</p>
+<!--        懒得搞-->
+
+<!--        不想做-->
+
+
+
+
+        <div style="border:0px solid #ff0000;width:60%;margin-left:20%;text-align:right;">
+            <form th:action="@{/index}" method="post">
+                <input type="hidden" name="oper" value="search"/>
+                请输入查询的关键字 ：<input type="text" name="keyword"/>
+                <input type="submit" value="查询" class="btn">
+            </form>
+            <a th:href="@{/add.do}" style="border-bottom:10px  solid blue;margin-bottom:4px;">添加新库存记录</a>
+        </div>
+        <table id="tbl_fruit">
+            <tr>
+
+                <th class="w20">名称</th>
+                <th class="w20">单价</th>
+                <th class="w20">库存</th>
+                <th>操作</th>
+            </tr>
+<!--            <tr th:if=""-->
+            <tr th:if="${#lists.isEmpty(session.fruitList)}">
+                <td colspan="4">对不起，当前查询列表为空！</td>
+            </tr>
+            <tr th:unless="${#lists.isEmpty(session.fruitList)}" th:each="fruit : ${session.fruitList}">
+
+<!--                <td><a th:href="@{'/edit.do?fid='+${fruit.fid}}" th:text="${fruit.fname}" ></a></td>-->
+                <td><a th:href="@{edit.do(fid = ${fruit.fid})}" th:text="${fruit.fname}" ></a></td>
+                <td th:text="${fruit.price}"></td>
+                <td th:text="${fruit.fcount}"></td>
+<!--                <td><img src="imgs/del.jpg" class="delImg" th:onclick="'delFruit('+${fruit.fid}+')'"/></td>-->
+                <td><img src="imgs/del.jpg" class="delImg" th:onclick="|delFruit(${fruit.fid})|"/></td>
+            </tr>
+        </table>
+
+        <div style="width:60%; margin-left: 20%;margin-top: 20px;border-top:50px"class="center">
+            <div style=" width:100%;margin-bottom: 10px; display: flex ;justify-content: center">
+                <div >当前的位置 : </div>
+                <input type="text"  th:value="|${session.pageNo} |" size="2">
+                <div th:text="| 共计${session.count}页|"></div>
+            </div>
+
+            <input type="button" value="首 页" class="btn" onclick="page(1) "th:disabled="${session.pageNo == 1}" />
+            <input type="button" value="上一页" class="btn" th:onclick="|page(${session.pageNo - 1},${session.count})|"/>
+            <input type="button" value="下一页" class="btn" th:onclick="|page(${session.pageNo + 1},${session.count})|"/>
+            <input type="button" value="尾 页" class="btn" th:onclick="|page(${session.count},${session.count})|" th:disabled="${session.pageNo == session.count}"/>
+
+        </div>
+    </div>
+    <div style="margin: 0;padding: 0;width: auto;height: auto; border:1px red ;position: relative;left: 10%;top:90%">
+   <div style="padding: 0;margin: 0;"> &copy;2020-2022 rkw 版权所有</div>
+    </footer>
+</div>
+
+</body>
+</html>
