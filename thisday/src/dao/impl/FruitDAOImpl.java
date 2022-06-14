@@ -10,9 +10,12 @@ import java.util.List;
 
 public class FruitDAOImpl extends BaseDAO<Fruit> implements FruitDAO {
     @Override
-    public List<Fruit> getFruitList(Integer pageNo) {
+    public List<Fruit> getFruitList(String keyword,Integer pageNo) {
 
-        return super.executeQuery("select * from t_fruit limit ? , 5",(pageNo - 1) * 5);
+        String sql = "select * from t_fruit where fname like ? or remake like ? limit ? , 5";
+        sql = "select * from t_fruit  limit ? , 5";
+        sql ="select * from t_fruit where fname like ? or remark like ? limit ? , 5";
+            return super.executeQuery(sql,'%'+keyword+'%','%'+keyword+'%',(pageNo - 1) * 5);
     }
 
     @Override
@@ -32,6 +35,7 @@ public class FruitDAOImpl extends BaseDAO<Fruit> implements FruitDAO {
 
     @Override
     public int updateFruit(Fruit fruit) {
+
         String sql = "update t_fruit set fname = ? , price = ?,fcount = ? ,remark = ?  where fid = ? " ;
        return super.executeUpdate(sql,fruit.getFname(),fruit.getPrice(),fruit.getFcount(),fruit.getRemark(),fruit.getFid());
     }
@@ -48,7 +52,8 @@ public class FruitDAOImpl extends BaseDAO<Fruit> implements FruitDAO {
     }
 
     @Override
-    public int getFruitCount() {
-        return ((Long) super.executeComplexQuery("select count(*) from t_fruit")[0]).intValue();
+    public int getFruitCount(String keyword) {
+
+        return ((Long) super.executeComplexQuery("select count(*) from t_fruit where fname like ? or remark like ?","%"+keyword+"%","%"+keyword+"%")[0]).intValue();
     }
 }
