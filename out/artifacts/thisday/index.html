@@ -19,10 +19,10 @@
         <div style="border:0px solid #ff0000;width:60%;margin-left:20%;text-align:right;">
             <form th:action="@{/index}" method="post">
                 <input type="hidden" name="oper" value="search"/>
-                请输入查询的关键字 ：<input type="text" name="keyword"/>
+                请输入查询的关键字 ：<input type="text" name="keyword" th:value="${session.keyword}"/>
                 <input type="submit" value="查询" class="btn">
             </form>
-            <a th:href="@{/add.do}" style="border-bottom:10px  solid blue;margin-bottom:4px;">添加新库存记录</a>
+            <a th:href="@{/add.do}" style="border-top:5px  solid blue; padding-top:2px;margin-bottom:4px;">添加新库存记录</a>
         </div>
         <table id="tbl_fruit">
             <tr>
@@ -60,11 +60,11 @@
             <input type="button" value="尾 页" class="btn" th:onclick="|page(${session.count},${session.count})|" th:disabled="${session.pageNo == session.count}"/>
 
         </div>
-    </div>
-    <div style="margin: 0;padding: 0;width: auto;height: auto; border:1px red ;position: relative;left: 10%;top:90%">
-   <div style="padding: 0;margin: 0;"> &copy;2020-2022 rkw 版权所有</div>
+    </div >
+    <footer class="ass" style="margin: 0;padding: 0;width: auto;height: auto; border:1px red ;position: absolute;left: 10%;top:90%">
+   <div class="ass"  style="padding: 0;margin: 0;"> &copy;2020-2022 rkw 版权所有</div>
     </footer>
-</div>
 
+</div>
 </body>
 </html>
