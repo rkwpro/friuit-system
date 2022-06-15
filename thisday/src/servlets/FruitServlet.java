@@ -2,6 +2,7 @@ package servlets;
 
 import dao.FruitDAO;
 import dao.impl.FruitDAOImpl;
+import javassist.compiler.MemberResolver;
 import myspringmvc.ViewBaseServlet;
 import pojo.Fruit;
 
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-
+import java.lang.reflect.*;
 /**
  * @author rkwpro
  * @email rkwpro@163.com
@@ -34,27 +35,24 @@ public class FruitServlet extends ViewBaseServlet {
 
             System.out.println("hewfrewfwesgvsdvgdsfcdsf............");
         System.out.println(operate);
-
-
-        switch(operate){
-            case "index":
-                index(req,resp);
-                break;
-            case "add":
-                add(req,resp);
-                break;
-            case "del":
-                del(req,resp);
-                break;
-            case "edit":
-                edit(req,resp);
-                break;
-            case "update":
-                update(req,resp);
-                break;
-            default:
-                throw new RuntimeException("operate非法");
-        }
+        Method[] methods = this.getClass().getDeclaredMethods();
+        for(Method m:methods){
+            String methodName = m.getName();
+            if(operate.equals(methodName))
+            {
+                try {
+                    System.out.println();
+                    System.out.println(this);
+                    System.out.println();
+                    m.invoke(this,req,resp);
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            }
+           System.out.println("find not this method>>>>>>......");
+        throw new RuntimeException("OPERATOR值非法");
 
     }
     private void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -127,13 +125,15 @@ public class FruitServlet extends ViewBaseServlet {
     }
 
         private void del(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-            String fid = req.getParameter("fid");
+            System.out.println("start open this del on html");
+        String fid = req.getParameter("fid");
             int fidInt = Integer.parseInt(fid);
             fruitDAO.delFruit(fidInt);
             resp.sendRedirect("fruit.do");
         }
     protected void edit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String fidStr = req.getParameter("fid");
+        System.out.println("start open this edit on html");
         operate = null;
         if (fidStr != null && !"".equals(fidStr))
         {
